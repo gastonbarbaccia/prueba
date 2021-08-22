@@ -100,7 +100,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                     </li>
                     <li class="creat-btn">
                         <div class="nav-link">
-                            <a class=" btn btn-sm btn-soft-primary nuevo" data-toggle="modal"  data-target="#nuevoRegistro" type="button"><i class="fas fa-plus me-2"></i>Agregar servicio</a>
+                            <a class=" btn btn-sm btn-soft-primary nuevo" data-toggle="modal" data-target="#nuevoRegistro" type="button"><i class="fas fa-plus me-2"></i>Agregar servicio</a>
                         </div>
                     </li>
                 </ul>
@@ -168,7 +168,18 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                                         <td> <?php echo $fila['servicio'] ?> </td>
                                                         <td> <?php echo $fila['1er_vto'] ?> </td>
                                                         <td> <?php echo $fila['2do_vto'] ?> </td>
-                                                        <td> <?php echo $fila['importe'] ?> </td>
+                                                        <td>
+                                                            <?php
+
+                                                            //Mostramos en la vista los numeros decimales con coma utilizando la funcion str_replace
+
+                                                            $var = $fila['importe'];
+                                                            $number = (string)$var;
+                                                            $format_number = str_replace('.', ',', $number);
+                                                            echo $format_number;
+
+                                                            ?>
+                                                        </td>
                                                         <td> <?php echo $fila['pagado'] ?> </td>
                                                         <td>
                                                             <a data-toggle="modal" class="editar" data-target="#actualizarRegistro" type="button"><i class="las la-pen text-secondary" style="font-size: 25px;"></i></a>
@@ -193,14 +204,20 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                         <!--end /table-->
                                         <div style="margin-top: 15px;">
 
-                                            <br>TOTAL: 
-                                            
-                                            <?php
-                                            
-                                            $TOTAL=mysqli_fetch_array($resultado,MYSQLI_NUM); 
+                                            <br>TOTAL:
 
-                                            echo $TOTAL[0];
-                                            
+                                            <?php
+
+                                            $TOTAL = mysqli_fetch_array($resultado, MYSQLI_NUM);
+
+                                            //Reemplazo el valor importe que viene con coma a punto para poder guardarlo en mysql
+                                            $var = $TOTAL[0];
+                                            $number = (string)$var;
+                                            $resultado_total = str_replace('.', ',', $number);
+
+
+                                            echo $resultado_total;
+
                                             ?>
 
                                             </br>
@@ -242,39 +259,39 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                             </div>
                                             <form action="actualizar_servicio.php" method="POST">
                                                 <div class="modal-body">
-                                                    <input id="id_servicio" name="id_servicio" class="form-control" type="hidden" >
+                                                    <input id="id_servicio" name="id_servicio" class="form-control" type="hidden">
                                                     <div class="mb-3 row">
                                                         <label for="example-text-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Servicio</label>
                                                         <div class="col-sm-10">
-                                                            <input id="servicio" name="servicio" class="form-control" type="text" >
+                                                            <input id="servicio" name="servicio" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-email-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">1er Vto.</label>
                                                         <div class="col-sm-10">
-                                                            <input id="ven_1" name="ven_1" class="form-control" type="text" >
+                                                            <input id="ven_1" name="ven_1" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-tel-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">2do Vto.</label>
                                                         <div class="col-sm-10">
-                                                            <input id="ven_2" name="ven_2" class="form-control" type="text" >
+                                                            <input id="ven_2" name="ven_2" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-password-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Importe</label>
                                                         <div class="col-sm-10">
-                                                            <input id="importe" name="importe" class="form-control" type="text" >
+                                                            <input id="importe" name="importe" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-number-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Pagado</label>
                                                         <div class="col-sm-10">
-                                                            <input id="pagado" name="pagado" class="form-control" type="text" >
+                                                            <input id="pagado" name="pagado" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                 </div>
-                                            
+
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary">Guardar</button>
                                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -294,39 +311,39 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                             </div>
                                             <form action="guardar_servicio.php" method="POST">
                                                 <div class="modal-body">
-                                                    <input id="id_servicio" name="id_servicio" class="form-control" type="hidden" >
+                                                    <input id="id_servicio" name="id_servicio" class="form-control" type="hidden">
                                                     <div class="mb-3 row">
                                                         <label for="example-text-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Servicio</label>
                                                         <div class="col-sm-10">
-                                                            <input id="servicio" name="servicio" class="form-control" type="text" >
+                                                            <input id="servicio" name="servicio" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-email-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">1er Vto.</label>
                                                         <div class="col-sm-10">
-                                                            <input id="ven_1" name="ven_1" class="form-control" type="text" >
+                                                            <input id="ven_1" name="ven_1" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-tel-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">2do Vto.</label>
                                                         <div class="col-sm-10">
-                                                            <input id="ven_2" name="ven_2" class="form-control" type="text" >
+                                                            <input id="ven_2" name="ven_2" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-password-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Importe</label>
                                                         <div class="col-sm-10">
-                                                            <input id="importe" name="importe" class="form-control" type="text" >
+                                                            <input id="importe" name="importe" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
                                                         <label for="example-number-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Pagado</label>
                                                         <div class="col-sm-10">
-                                                            <input id="pagado" name="pagado" class="form-control" type="text" >
+                                                            <input id="pagado" name="pagado" class="form-control" type="text">
                                                         </div>
                                                     </div>
                                                 </div>
-                                            
+
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary">Guardar</button>
                                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -390,7 +407,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
     </script>
 
     <!-- Funcion para recorrer los elementos de la fila y luego enviar el elemento ID al input eliminar_id -->
-   <!--  <script>
+    <script>
         $('.eliminar').on('click', function() {
 
             $tr = $(this).closest('tr');
@@ -417,13 +434,13 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
             $('#pagado').val(datos[5]);
 
             var inputs = $("input[type=text]");
-            for(var i = 0; i < inputs.length; i++){
-            var aux = $(inputs[i]).val().trim();
-            $(inputs[i]).val(aux);
+            for (var i = 0; i < inputs.length; i++) {
+                var aux = $(inputs[i]).val().trim();
+                $(inputs[i]).val(aux);
             }
         });
     </script>
- -->
+
 
 </body>
 
