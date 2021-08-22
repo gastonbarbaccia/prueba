@@ -390,7 +390,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
     </script>
 
     <!-- Funcion para recorrer los elementos de la fila y luego enviar el elemento ID al input eliminar_id -->
-    <script>
+   <!--  <script>
         $('.eliminar').on('click', function() {
 
             $tr = $(this).closest('tr');
@@ -423,7 +423,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
             }
         });
     </script>
-
+ -->
 
 </body>
 
