@@ -176,7 +176,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                                             $var = $fila['importe'];
                                                             $number = (string)$var;
                                                             $format_number = str_replace('.', ',', $number);
-                                                            echo $format_number;
+                                                            echo "$ ".$format_number;
 
                                                             ?>
                                                         </td>
@@ -216,7 +216,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                             $resultado_total = str_replace('.', ',', $number);
 
 
-                                            echo $resultado_total;
+                                            echo "$ ".$resultado_total;
 
                                             ?>
 
