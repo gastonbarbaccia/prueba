@@ -38,7 +38,13 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
 
 </head>
 
+<script>
 
+function print_pdf() {
+        window.print();
+    }
+
+</script>
 
 <body class="">
     <!-- Left Sidenav -->
@@ -101,6 +107,11 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                     <li class="creat-btn">
                         <div class="nav-link">
                             <a class=" btn btn-sm btn-soft-primary nuevo" data-toggle="modal" data-target="#nuevoRegistro" type="button"><i class="fas fa-plus me-2"></i>Agregar servicio</a>
+                        </div>
+                    </li>
+                    <li class="creat-btn" onclick="window.print()">
+                        <div class="nav-link">
+                            <a class=" btn btn-sm btn-soft-primary nuevo" type="button"><i class="fas fa-print me-2"></i>Imprimir</a>
                         </div>
                     </li>
                 </ul>
