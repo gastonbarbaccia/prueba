@@ -38,13 +38,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
 
 </head>
 
-<script>
 
-function print_pdf() {
-        window.print();
-    }
-
-</script>
 
 <body class="">
     <!-- Left Sidenav -->
@@ -109,7 +103,7 @@ function print_pdf() {
                             <a class=" btn btn-sm btn-soft-primary nuevo" data-toggle="modal" data-target="#nuevoRegistro" type="button"><i class="fas fa-plus me-2"></i>Agregar servicio</a>
                         </div>
                     </li>
-                    <li class="creat-btn" onclick="window.print()">
+                    <li class="creat-btn" onclick="print_pdf()">
                         <div class="nav-link">
                             <a class=" btn btn-sm btn-soft-primary nuevo" type="button"><i class="fas fa-print me-2"></i>Imprimir</a>
                         </div>
@@ -165,7 +159,7 @@ function print_pdf() {
                                                     <th>2do Vto.</th>
                                                     <th>Importe</th>
                                                     <th>Pagado</th>
-                                                    <th>Opciones</th>
+                                                    <th class="opciones">Opciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -192,7 +186,7 @@ function print_pdf() {
                                                             ?>
                                                         </td>
                                                         <td> <?php echo $fila['pagado'] ?> </td>
-                                                        <td>
+                                                        <td class="opciones">
                                                             <a data-toggle="modal" class="editar" data-target="#actualizarRegistro" type="button"><i class="las la-pen text-secondary" style="font-size: 25px;"></i></a>
 
                                                             <a data-toggle="modal" class="eliminar" data-target="#confirmarEliminacion" type="button">
@@ -456,6 +450,18 @@ function print_pdf() {
                 $(inputs[i]).val(aux);
             }
         });
+
+        function print_pdf() {
+
+
+            $('td:nth-child(7),th:nth-child(7)').hide();
+
+            window.print();
+
+            $('td:nth-child(7),th:nth-child(7)').show();
+
+        }
+
     </script>
 
 
