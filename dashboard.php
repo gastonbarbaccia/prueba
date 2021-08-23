@@ -425,12 +425,16 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
             var datos = $tr.children("td").map(function() {
                 return $(this).text();
             });
+          
+            let sin_espacios =  datos[4].replace(/ /g, ""); 
+            let importe =  sin_espacios.replace('$',''); 
+
 
             $('#id_servicio').val(datos[0]);
             $('#servicio').val(datos[1]);
             $('#ven_1').val(datos[2]);
             $('#ven_2').val(datos[3]);
-            $('#importe').val(datos[4]);
+            $('#importe').val(importe);
             $('#pagado').val(datos[5]);
 
             var inputs = $("input[type=text]");
