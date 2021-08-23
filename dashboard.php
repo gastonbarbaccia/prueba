@@ -153,13 +153,13 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                         <table class="table table-striped mb-0">
                                             <thead>
                                                 <tr style="text-align: center;">
-                                                    <th>ID</th>
-                                                    <th>Servicio</th>
-                                                    <th>1er Vto.</th>
-                                                    <th>2do Vto.</th>
-                                                    <th>Importe</th>
-                                                    <th>Pagado</th>
-                                                    <th class="opciones">Opciones</th>
+                                                    <th style="font-size: 13px;"><b>ID</b></th>
+                                                    <th style="font-size: 13px;"><b>Servicio</b></th>
+                                                    <th style="font-size: 13px;"><b>1er Vto.</b></th>
+                                                    <th style="font-size: 13px;"><b>2do Vto.</b></th>
+                                                    <th style="font-size: 13px;"><b>Importe</b></th>
+                                                    <th style="font-size: 13px;"><b>Pagado</b></th>
+                                                    <th style="font-size: 13px;"><b>Opciones</b></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -186,7 +186,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                                             ?>
                                                         </td>
                                                         <td> <?php echo $fila['pagado'] ?> </td>
-                                                        <td class="opciones">
+                                                        <td>
                                                             <a data-toggle="modal" class="editar" data-target="#actualizarRegistro" type="button"><i class="las la-pen text-secondary" style="font-size: 25px;"></i></a>
 
                                                             <a data-toggle="modal" class="eliminar" data-target="#confirmarEliminacion" type="button">
