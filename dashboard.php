@@ -176,7 +176,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                                             $var = $fila['importe'];
                                                             $number = (string)$var;
                                                             $format_number = str_replace('.', ',', $number);
-                                                            echo "$ ".$format_number;
+                                                            echo "$ " . $format_number;
 
                                                             ?>
                                                         </td>
@@ -216,7 +216,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                             $resultado_total = str_replace('.', ',', $number);
 
 
-                                            echo "$ ".$resultado_total;
+                                            echo "$ " . $resultado_total;
 
                                             ?>
 
@@ -281,7 +281,8 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                                     <div class="mb-3 row">
                                                         <label for="example-password-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Importe</label>
                                                         <div class="col-sm-10">
-                                                            <input id="importe" name="importe" class="form-control" type="text">
+                                                            <input class="form-control" type="text" style="float: left;width:10%;text-align:right" disabled value="$">
+                                                            <input id="importe" name="importe" class="form-control" type="text" style="float: left;width:90%;">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
@@ -333,7 +334,8 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                                     <div class="mb-3 row">
                                                         <label for="example-password-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Importe</label>
                                                         <div class="col-sm-10">
-                                                            <input id="importe" name="importe" class="form-control" type="text">
+                                                            <input class="form-control" type="text" style="float: left;width:10%;text-align:right" disabled value="$">
+                                                            <input id="importe" name="importe" class="form-control" type="text" style="float: left;width:90%;">
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row">
@@ -425,9 +427,9 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
             var datos = $tr.children("td").map(function() {
                 return $(this).text();
             });
-          
-            let sin_espacios =  datos[4].replace(/ /g, ""); 
-            let importe =  sin_espacios.replace('$',''); 
+
+            let sin_espacios = datos[4].replace(/ /g, "");
+            let importe = sin_espacios.replace('$', '');
 
 
             $('#id_servicio').val(datos[0]);
