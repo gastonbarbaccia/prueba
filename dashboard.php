@@ -232,7 +232,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Eliminar servicio</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Eliminar Servicio</h5>
                                             </div>
                                             <div class="modal-body">
                                                 ¿Está seguro que desea eliminar el servicio?
@@ -255,7 +255,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Actualizar Registro</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Actualizar Servicio</h5>
                                             </div>
                                             <form action="actualizar_servicio.php" method="POST">
                                                 <div class="modal-body">
@@ -307,7 +307,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Nuevo Registro</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Nuevo Servicio</h5>
                                             </div>
                                             <form action="guardar_servicio.php" method="POST">
                                                 <div class="modal-body">
