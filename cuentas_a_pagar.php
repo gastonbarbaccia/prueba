@@ -1,3 +1,17 @@
+<?php
+
+include 'conexiondb.php';
+
+$conexion = conexion_db();
+
+$registros = $conexion->query("SELECT * FROM gastos");
+
+
+$resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM gastos WHERE pagado = '' ");
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +37,7 @@
     <link href="default/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
 </head>
+
 
 <body class="">
     <!-- Left Sidenav -->
@@ -81,9 +96,15 @@
                             <i data-feather="menu" class="align-self-center topbar-icon"></i>
                         </button>
                     </li>
+
                     <li class="creat-btn">
                         <div class="nav-link">
-                            <a class=" btn btn-sm btn-soft-primary" href="agregar_gasto.php" role="button"><i class="fas fa-plus me-2"></i>Agregar gasto</a>
+                        <a class=" btn btn-sm btn-soft-primary nuevo" data-toggle="modal" data-target="#nuevoRegistro" type="button"><i class="fas fa-plus me-2"></i>Agregar gasto</a>
+                        </div>
+                    </li>
+                    <li class="creat-btn" onclick="print_pdf()">
+                        <div class="nav-link">
+                            <a class=" btn btn-sm btn-soft-primary nuevo" type="button"><i class="fas fa-print me-2"></i>Imprimir</a>
                         </div>
                     </li>
                 </ul>
@@ -128,6 +149,7 @@
                                         <table class="table table-striped mb-0">
                                             <thead>
                                                 <tr style="text-align: center;">
+                                                    <th>ID</th>
                                                     <th>Detalle</th>
                                                     <th>Cuotas</th>
                                                     <th>Importe</th>
@@ -136,35 +158,76 @@
                                                     <th>Opciones</th>
                                                 </tr>
                                             </thead>
+
                                             <tbody>
-                                                <tr style="text-align: center;">
-                                                    <td>Supermercado</td>
-                                                    <td>2</td>
-                                                    <td>$10000</td>
-                                                    <td>Junio</td>
-                                                    <td>Si</td>
-                                                    <td>
-                                                        <a href="editar_gasto.php"><i class="las la-pen text-secondary" style="font-size: 25px;"></i></a>
-                                                        <a href="#" data-toggle="modal" data-target="#exampleModal" type="button"><i class="las la-trash-alt text-secondary" style="font-size: 25px;margin-left:5px"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr style="text-align: center;">
-                                                    <td>Pedidos Ya</td>
-                                                    <td></td>
-                                                    <td>$1200</td>
-                                                    <td>Junio</td>
-                                                    <td>Si</td>
-                                                    <td>
-                                                        <a href="editar_gasto.php"><i class="las la-pen text-secondary" style="font-size: 25px;"></i></a>
-                                                        <a href="#" data-toggle="modal" data-target="#exampleModal" type="button"><i class="las la-trash-alt text-secondary" style="font-size: 25px;margin-left:5px"></i></a>
-                                                    </td>
-                                                </tr>
+
+                                                <?php
+
+                                                while ($fila = $registros->fetch_assoc()) {
+
+                                                ?>
+
+                                                    <tr style="text-align: center;">
+
+                                                        <td> <?php echo $fila['id'] ?> </td>
+                                                        <td> <?php echo $fila['detalle'] ?> </td>
+                                                        <td> <?php echo $fila['cuotas'] ?> </td>
+
+                                                        <td>
+                                                            <?php
+
+                                                            //Mostramos en la vista los numeros decimales con coma utilizando la funcion str_replace
+
+                                                            $var = $fila['importe'];
+                                                            $number = (string)$var;
+                                                            $format_number = str_replace('.', ',', $number);
+                                                            echo "$ " . $format_number;
+
+                                                            ?>
+                                                        </td>
+                                                        <td> <?php echo $fila['mes'] ?> </td>
+                                                        <td> <?php echo $fila['pagado'] ?> </td>
+                                                        <td>
+                                                            <a data-toggle="modal" class="editar" data-target="#actualizarRegistro" type="button"><i class="las la-pen text-secondary" style="font-size: 25px;"></i></a>
+
+                                                            <a data-toggle="modal" class="eliminar" data-target="#confirmarEliminacion" type="button">
+                                                                <i class="las la-trash-alt text-secondary" style="font-size: 25px;margin-left:5px"></i></a>
+
+
+
+                                                        </td>
+                                                    </tr>
+
+                                                <?php
+
+                                                }
+
+                                                ?>
+
                                             </tbody>
                                         </table>
                                         <!--end /table-->
                                         <div style="margin-top: 15px;">
-                                            <br>TOTAL: $11200</br>
+
+                                            <br>TOTAL:
+
+                                            <?php
+
+                                            $TOTAL = mysqli_fetch_array($resultado, MYSQLI_NUM);
+
+                                            //Reemplazo el valor importe que viene con coma a punto para poder guardarlo en mysql
+                                            $var = $TOTAL[0];
+                                            $number = (string)$var;
+                                            $resultado_total = str_replace('.', ',', $number);
+
+
+                                            echo "$ " . $resultado_total;
+
+                                            ?>
+
+                                            </br>
                                         </div>
+
                                     </div>
                                     <!--end /tableresponsive-->
                                 </div>
@@ -191,24 +254,133 @@
         </div>
         <!-- end page content -->
     </div>
-    <!-- end page-wrapper -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+    <!-- MODAL ELIMINAR-->
+    <div class="modal fade" id="confirmarEliminacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Eliminar gasto</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Eliminar Servicio</h5>
                 </div>
                 <div class="modal-body">
-                    ¿Está seguro que desea eliminarlo?
+                    ¿Está seguro que desea eliminar el servicio?
                 </div>
-                <div class="modal-footer">
-                    <a href="cuentas_a_pagar.php" type="button" class="btn btn-primary">Confirmar</a>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                </div>
+                <!-- Formulario que se envia para eliminar el registro al hacer click en Confirmar -->
+                <form method="POST" id="formulario" action="eliminar_gasto.php">
+                    <input type="hidden" name="eliminar_id" id="eliminar_id">
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btn-confirmar-eliminacion">Confirmar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
+
+    <!-- MODAL EDITAR -->
+    <div class="modal fade" id="actualizarRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar Gasto</h5>
+                </div>
+                <form action="actualizar_gasto.php" method="POST">
+                    <div class="modal-body">
+                        <input id="id_gasto" name="id_gasto" class="form-control" type="hidden">
+                        <div class="mb-3 row">
+                            <label for="example-text-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Detalle</label>
+                            <div class="col-sm-10">
+                                <input id="detalle" name="detalle" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-email-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Cuotas</label>
+                            <div class="col-sm-10">
+                                <input id="cuotas" name="cuotas" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-tel-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Mes</label>
+                            <div class="col-sm-10">
+                                <input id="mes" name="mes" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-password-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Importe</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" style="float: left;width:10%;text-align:right" disabled value="$">
+                                <input id="importe" name="importe" class="form-control" type="text" style="float: left;width:90%;">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-number-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Pagado</label>
+                            <div class="col-sm-10">
+                                <input id="pagado" name="pagado" class="form-control" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NUEVO -->
+    <div class="modal fade" id="nuevoRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nuevo Gasto</h5>
+                </div>
+                <form action="guardar_gasto.php" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <label for="example-text-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Detalle</label>
+                            <div class="col-sm-10">
+                                <input id="detalle" name="detalle" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-email-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Cuotas</label>
+                            <div class="col-sm-10">
+                                <input id="cuotas" name="cuotas" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-password-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Importe</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" style="float: left;width:10%;text-align:right" disabled value="$">
+                                <input id="importe" name="importe" class="form-control" type="text" style="float: left;width:90%;">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-tel-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Mes</label>
+                            <div class="col-sm-10">
+                                <input id="mes" name="mes" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="example-number-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Pagado</label>
+                            <div class="col-sm-10">
+                                <input id="pagado" name="pagado" class="form-control" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
     <!-- jQuery  -->
@@ -232,6 +404,64 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Se agrega este js para detener el refresco de la pagina en la funcion de js en "e"-->
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+
+    <!--Script para cargar el ID del registro a eliminar en el modal-->
+    <script>
+        $('.eliminar').on('click', function() {
+
+            $tr = $(this).closest('tr');
+            var datos = $tr.children("td").map(function() {
+                return $(this).text();
+            });
+
+            $('#eliminar_id').val(datos[0]);
+        });
+    </script>
+
+    <script>
+        $('.editar').on('click', function() {
+
+            $tr = $(this).closest('tr');
+            var datos = $tr.children("td").map(function() {
+                return $(this).text();
+            });
+
+            //Quito estacios en los importes
+            let sin_espacios = datos[3].replace(/ /g, "");
+            let importe = sin_espacios.replace('$', '');
+
+            //Coloco los valores en los inputs a editar
+            $('#id_gasto').val(datos[0]);
+            $('#detalle').val(datos[1]);
+            $('#cuotas').val(datos[2]);
+            $('#importe').val(importe);
+            $('#mes').val(datos[4]);
+            $('#pagado').val(datos[5]);
+
+            //Saco los espacios de adelante y atras de los textos y numeros
+            var inputs = $("input[type=text]");
+            for (var i = 0; i < inputs.length; i++) {
+                var aux = $(inputs[i]).val().trim();
+                $(inputs[i]).val(aux);
+            }
+        });
+    </script>
+
+    <script>
+        function print_pdf() {
+
+
+            $('td:nth-child(7),th:nth-child(7)').hide();
+
+            window.print();
+
+            $('td:nth-child(7),th:nth-child(7)').show();
+
+        }
+    </script>
 
 </body>
 
