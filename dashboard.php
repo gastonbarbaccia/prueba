@@ -2,6 +2,18 @@
 
 include 'conexiondb.php';
 
+session_start();
+
+if(!isset($_SESSION['id'])){
+
+
+    header('Location:http://localhost/prueba/index.php');
+  
+
+}
+
+
+
 $conexion = conexion_db();
 
 $registros = $conexion->query("SELECT * FROM servicios");
@@ -73,7 +85,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM se
                 </li>
 
                 <li>
-                    <a href="index.php"><i data-feather="log-out" class="align-self-center menu-icon"></i><span>Cerrar
+                    <a href="destruir_sesion.php"><i data-feather="log-out" class="align-self-center menu-icon"></i><span>Cerrar
                             sesión</span></a>
                 </li>
 

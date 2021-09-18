@@ -1,3 +1,18 @@
+<?php
+
+session_start();
+
+if(!isset($_SESSION['id'])){
+
+
+    header('Location:http://localhost/prueba/index.php');
+  
+
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

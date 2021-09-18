@@ -50,7 +50,7 @@
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <div class="tab-pane active p-3" id="LogIn_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="dashboard.php" method="post">
+                                        <form class="form-horizontal auth-form" action="login.php" method="post">
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="email">Correo electrónico</label>
                                                 <div class="input-group">
