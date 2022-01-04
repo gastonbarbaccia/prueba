@@ -45,7 +45,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
     <link href="default/assets/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
     <link href="plugins/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
     <link href="default/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="default/assets/css/toastr.css" rel="stylesheet"/>
 </head>
 
 
@@ -156,7 +156,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
                                 <!--end card-header-->
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-striped mb-0">
+                                        <table class="table table-striped mb-0" id="tabla_gastos" name="tabla_gastos">
                                             <thead>
                                                 <tr style="text-align: center;">
                                                     <th>ID</th>
@@ -166,6 +166,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
                                                     <th>Mes</th>
                                                     <th>Pagado</th>
                                                     <th>Opciones</th>
+                                                    <th style="display: none;">Notas</th>
                                                 </tr>
                                             </thead>
 
@@ -174,7 +175,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
                                                 <?php
 
                                                 while ($fila = $registros->fetch_assoc()) {
-
+                                                   
                                                 ?>
 
                                                     <tr style="text-align: center;">
@@ -206,10 +207,11 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
 
 
                                                         </td>
+                                                        <td style="display: none;"> <?php echo $fila['notas'] ?> </td>
                                                     </tr>
 
                                                 <?php
-
+                                                           
                                                 }
 
                                                 ?>
@@ -267,7 +269,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
 
 
     <!-- MODAL ELIMINAR-->
-    <div class="modal fade" id="confirmarEliminacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="confirmarEliminacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -290,7 +292,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
 
 
     <!-- MODAL EDITAR -->
-    <div class="modal fade" id="actualizarRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="actualizarRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -330,6 +332,12 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
                                 <input id="pagado" name="pagado" class="form-control" type="text">
                             </div>
                         </div>
+                        <div class="mb-3 row">
+                            <label for="example-number-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Notas</label>
+                            <div class="col-sm-10">
+                                <textarea id="notas" name="notas" class="form-control" type="text" style="height:100px;resize:none"></textarea>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
@@ -342,13 +350,13 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
     </div>
 
     <!-- MODAL NUEVO -->
-    <div class="modal fade" id="nuevoRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="nuevoRegistro" name="nuevoRegistro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Nuevo Gasto</h5>
                 </div>
-                <form action="guardar_gasto.php" method="POST">
+                <form id="nuevo_gasto" name="nuevo_gasto" action="guardar_gasto.php" method="POST">
                     <div class="modal-body">
                         <div class="mb-3 row">
                             <label for="example-text-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Detalle</label>
@@ -381,17 +389,23 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
                                 <input id="pagado" name="pagado" class="form-control" type="text">
                             </div>
                         </div>
+                        <div class="mb-3 row">
+                            <label for="example-number-input" class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Notas</label>
+                            <div class="col-sm-10">
+                                <textarea id="notas" name="notas" class="form-control" type="text" style="height:100px;resize:none"></textarea>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-primary" id="guardar_gasto" name="guardar_gasto" data-backdrop="false" data-dismiss="modal">Guardar</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
+                                        
 
     <!-- jQuery  -->
     <script src="default/assets/js/jquery.min.js"></script>
@@ -418,6 +432,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
     <!-- Se agrega este js para detener el refresco de la pagina en la funcion de js en "e"-->
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 
+    <script src="default/assets/js/toastr.min.js"></script>
     <!--Script para cargar el ID del registro a eliminar en el modal-->
     <script>
         $('.eliminar').on('click', function() {
@@ -450,6 +465,7 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
             $('#importe').val(importe);
             $('#mes').val(datos[4]);
             $('#pagado').val(datos[5]);
+            $('#notas').val(datos[7]);
 
             //Saco los espacios de adelante y atras de los textos y numeros
             var inputs = $("input[type=text]");
@@ -472,6 +488,44 @@ $resultado = $conexion->query("SELECT ROUND(SUM(importe),2) as resultado FROM ga
 
         }
     </script>
+
+
+<!-- Codigo para mostrar alerta de guardado exitosamente un nuevo gasto -->
+    <script>
+        function notificacion() {
+
+            toastr.success('El gasto se ha guardado exitosamente!')
+          
+        }
+
+    </script>
+
+    <script>
+
+    $(document).ready(function(){
+        $("#guardar_gasto").click(function(){
+            $.ajax({
+                url: "guardar_gasto.php",
+                type: 'post',
+                data: $('#nuevo_gasto').serialize(),
+ 
+                success: function(result){
+                    
+                    $("#tabla_gastos").load(" #tabla_gastos");
+
+                    notificacion();
+
+                    
+                    
+                }
+            });
+           
+        });
+    });
+
+   
+    </script>
+
 
 </body>
 

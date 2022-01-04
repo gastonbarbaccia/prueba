@@ -9,6 +9,7 @@ $cuotas = $_POST['cuotas'];
 $importe = $_POST['importe'];
 $mes = $_POST['mes'];
 $pagado = $_POST['pagado'];
+$notas = $_POST['notas'];
 
 //Reemplazo el valor importe que viene con coma a punto para poder guardarlo en mysql
 $var = $importe;
@@ -16,7 +17,7 @@ $number = (string)$var;
 $format_number = str_replace(',', '.', $number);
 
 
-$conexion->query("INSERT INTO gastos (`detalle`, `cuotas`,  `importe`, `mes`,`pagado`) VALUES ( '$detalle' , '$cuotas', '$format_number', '$mes', '$pagado')");
+$conexion->query("INSERT INTO gastos (`detalle`, `cuotas`,  `importe`, `mes`,`pagado`,`notas`) VALUES ( '$detalle' , '$cuotas', '$format_number', '$mes', '$pagado','$notas')");
 
 header('Location:cuentas_a_pagar.php');
 
